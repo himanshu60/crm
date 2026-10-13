@@ -13,7 +13,7 @@ Rule: write one file, then run `npm run lint` in `server/` and get zero errors b
 - [x] `.env.example` and `.env` (local MongoDB for now)
 - [x] Create the folder structure and empty source files
 - [ ] Create a MongoDB Atlas cluster, then put its connection string in `.env` as `MONGO_URI`
-- [ ] `git init` inside `Round1Assignment/` and create a GitHub repo
+- [x] `git init` and push to https://github.com/himanshu60/crm
 
 ## Phase B: Server skeleton
 - [x] `src/config/db.js`: connect with `MONGO_URI`
@@ -41,7 +41,7 @@ Rule: write one file, then run `npm run lint` in `server/` and get zero errors b
 - [x] Postman collection: `CRM-API.postman_collection.json` (ran it with Newman, all 6 requests pass)
 - [x] `README.md` with example requests and responses
 - [ ] Switch `MONGO_URI` to Atlas and run `npm run dev` once to confirm it connects
-- [ ] Commit and push to GitHub
+- [x] Commit and push to GitHub
 - [ ] (Optional) Deploy on Render with the Atlas URI
 
 ### Postman flow to test
@@ -54,10 +54,10 @@ Rule: write one file, then run `npm run lint` in `server/` and get zero errors b
 7. Call any protected route without a token: expect **401**.
 
 ## Phase F: Bonus React client (only if time is left)
-- [ ] `npm create vite@latest client -- --template react`, then `npm i axios react-router-dom`
-- [ ] `api/axios.js`, `context/AuthContext.jsx`, `components/ProtectedRoute.jsx`
-- [ ] Pages: `EnquiryForm` (public), `Login`, `Register`, `Dashboard` (public leads with a Claim button, plus my leads)
-- [ ] Test the full flow in the browser
+- [x] `npm create vite@latest client -- --template react --eslint`, then `npm i axios react-router-dom`
+- [x] `api/axios.js`, `context/AuthContext.js` + `AuthProvider.jsx`, `components/ProtectedRoute.jsx`, `Navbar.jsx`, `LeadsTable.jsx`
+- [x] Pages: `EnquiryForm` (public), `Login`, `Register`, `Dashboard` (public leads with a Claim button, plus my leads)
+- [x] Test the full flow in the browser (headless Chrome: 24 checks pass)
 
 ## Final
 - [ ] Submit the GitHub link (and the deployed URL, if there is one) in the Google Form before 14 Oct, 5 PM

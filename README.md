@@ -1,6 +1,6 @@
-# CRM Lead Management API
+# CRM Lead Management
 
-The REST API for a small CRM (Customer Relationship Management) system, built with **Node.js, Express, MongoDB and JWT**.
+The REST API for a small CRM (Customer Relationship Management) system, built with **Node.js, Express, MongoDB and JWT**. A small **React** client is included for trying the whole flow in a browser.
 
 Prospective students submit a public enquiry form. Counselors (employees) log in, see every unclaimed enquiry and can **claim** one. A claimed enquiry is assigned to that counselor and is no longer visible to anyone else.
 
@@ -28,8 +28,9 @@ Public and private are not separate collections. They are the same document, tol
 
 ## Tech stack
 
-Node.js, Express 5, MongoDB with Mongoose 9, `jsonwebtoken`, `bcryptjs`, `validator`, `cors`, `dotenv`.
-Dev tools: `nodemon`, ESLint 10.
+**Backend:** Node.js, Express 5, MongoDB with Mongoose 9, `jsonwebtoken`, `bcryptjs`, `validator`, `cors`, `dotenv`. Dev tools: `nodemon`, ESLint 10.
+
+**Frontend:** React 19, Vite, React Router, Axios, ESLint.
 
 ## Getting started
 
@@ -55,6 +56,26 @@ The API starts on `http://localhost:5000`. Check it with `GET /api/health`.
 | `JWT_EXPIRES_IN` | `1d` | How long a token stays valid |
 
 The server refuses to start if `MONGO_URI` or `JWT_SECRET` is missing.
+
+### Run the React client (optional)
+
+Keep the backend running, then in a second terminal:
+
+```bash
+cd crm/client
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. The client calls `http://localhost:5000/api` by default. To use a different backend URL, create `client/.env` with `VITE_API_URL=<url>` (see `client/.env.example`).
+
+| Page | Route | Login? | What it does |
+|---|---|---|---|
+| Enquiry form | `/` | No | Students submit an enquiry |
+| Register / Login | `/register`, `/login` | No | Employee account; the JWT is saved in `localStorage` |
+| Dashboard | `/dashboard` | Yes | **Public Leads** table with a Claim button, and **My Leads** table |
+
+If a lead was claimed by someone else first, the dashboard shows "Enquiry already claimed" and refreshes the list. An expired or invalid token logs the user out.
 
 ## API endpoints
 
@@ -158,6 +179,26 @@ crm/
 │   ├── eslint.config.js
 │   ├── .env.example
 │   └── package.json
+├── client/
+│   ├── src/
+│   │   ├── api/axios.js              # base URL + attaches the JWT to every request
+│   │   ├── context/
+│   │   │   ├── AuthContext.js        # context + useAuth hook
+│   │   │   └── AuthProvider.jsx      # token/employee state, login, logout
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── ProtectedRoute.jsx    # redirects to /login without a token
+│   │   │   └── LeadsTable.jsx        # used by both lead lists
+│   │   ├── pages/
+│   │   │   ├── EnquiryForm.jsx       # public form
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── Dashboard.jsx         # public leads + claim, my leads
+│   │   ├── App.jsx                   # routes
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── .env.example
+│   └── package.json
 ├── CRM-API.postman_collection.json
 └── README.md
 ```
@@ -170,10 +211,13 @@ crm/
 
 If the server runs somewhere else, change the `baseUrl` collection variable (default `http://localhost:5000/api`).
 
-## Scripts (inside `server/`)
+## Scripts
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Start with nodemon (restarts when files change) |
-| `npm start` | Start with node |
-| `npm run lint` | Run ESLint |
+| Folder | Command | What it does |
+|---|---|---|
+| `server/` | `npm run dev` | Start with nodemon (restarts when files change) |
+| `server/` | `npm start` | Start with node |
+| `server/` | `npm run lint` | Run ESLint |
+| `client/` | `npm run dev` | Start the Vite dev server |
+| `client/` | `npm run build` | Production build into `client/dist` |
+| `client/` | `npm run lint` | Run ESLint |
