@@ -1,0 +1,118 @@
+{
+    "info": {
+        "name": "CRM Lead Management API",
+        "description": "Run in order: Register or Login (saves token) -> Submit Enquiry (saves enquiryId) -> Unclaimed Leads -> Claim Lead -> My Leads.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+    },
+    "variable": [
+        { "key": "baseUrl", "value": "http://localhost:5000/api" },
+        { "key": "token", "value": "" },
+        { "key": "enquiryId", "value": "" }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register Employee",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": ["const json = pm.response.json();", "if (json.token) pm.collectionVariables.set('token', json.token);"]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": { "type": "noauth" },
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Asha Verma\",\n    \"email\": \"asha@example.com\",\n    \"password\": \"secret123\"\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": "{{baseUrl}}/auth/register"
+                    }
+                },
+                {
+                    "name": "Login Employee",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": ["const json = pm.response.json();", "if (json.token) pm.collectionVariables.set('token', json.token);"]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": { "type": "noauth" },
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"asha@example.com\",\n    \"password\": \"secret123\"\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": "{{baseUrl}}/auth/login"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Enquiries",
+            "item": [
+                {
+                    "name": "Submit Enquiry (public form, no auth)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": ["const json = pm.response.json();", "if (json.enquiry) pm.collectionVariables.set('enquiryId', json.enquiry._id);"]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": { "type": "noauth" },
+                        "method": "POST",
+                        "header": [{ "key": "Content-Type", "value": "application/json" }],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Ravi Kumar\",\n    \"email\": \"ravi@example.com\",\n    \"phone\": \"9876543210\",\n    \"courseInterest\": \"Full Stack Web Development\",\n    \"message\": \"Please share the fee details\"\n}",
+                            "options": { "raw": { "language": "json" } }
+                        },
+                        "url": "{{baseUrl}}/enquiries/public"
+                    }
+                },
+                {
+                    "name": "Unclaimed Leads",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/enquiries/public"
+                    }
+                },
+                {
+                    "name": "Claim Lead",
+                    "request": {
+                        "method": "PATCH",
+                        "url": "{{baseUrl}}/enquiries/{{enquiryId}}/claim"
+                    }
+                },
+                {
+                    "name": "My Claimed Leads",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/enquiries/private"
+                    }
+                }
+            ]
+        }
+    ]
+}
