@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { CircleAlert, LoaderCircle, Lock, Mail, User, UserPlus } from 'lucide-react'
 import api, { getErrorMessage } from '../api/axios'
+import AuthLayout from '../components/AuthLayout'
+import FormField from '../components/FormField'
+import PasswordInput from '../components/PasswordInput'
 import { useAuth } from '../context/AuthContext'
 
 export default function Register() {
@@ -23,7 +27,7 @@ export default function Register() {
     try {
       const res = await api.post('/auth/register', form)
       login(res.data)
-      navigate('/dashboard')
+      navigate('/dashboard', { replace: true })
     } catch (err) {
       setError(getErrorMessage(err))
       setSubmitting(false)
@@ -31,29 +35,33 @@ export default function Register() {
   }
 
   return (
-    <div className="card narrow">
-      <h2>Employee Register</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name
-          <input name="name" value={form.name} onChange={handleChange} required />
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" value={form.email} onChange={handleChange} required />
-        </label>
-        <label>
-          Password (min 6 characters)
-          <input type="password" name="password" minLength={6} value={form.password} onChange={handleChange} required />
-        </label>
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Creating account...' : 'Register'}
+    <AuthLayout title="Create your account" subtitle="Register as a counselor to start claiming leads.">
+      <form className="form" onSubmit={handleSubmit}>
+        <FormField label="Full name" icon={User}>
+          <input name="name" value={form.name} onChange={handleChange} placeholder="Asha Verma" autoComplete="name" required />
+        </FormField>
+        <FormField label="Work email" icon={Mail}>
+          <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="you@company.com" autoComplete="email" required />
+        </FormField>
+        <FormField label="Password" icon={Lock} hint="At least 6 characters">
+          <PasswordInput name="password" value={form.password} onChange={handleChange} placeholder="Create a password" minLength={6} autoComplete="new-password" required />
+        </FormField>
+
+        {error && (
+          <div className="callout callout-danger" role="alert">
+            <CircleAlert size={18} />
+            <span>{error}</span>
+          </div>
+        )}
+
+        <button type="submit" className="btn btn-primary btn-block btn-lg" disabled={submitting}>
+          {submitting ? <LoaderCircle size={18} className="spin" /> : <UserPlus size={18} />}
+          {submitting ? 'Creating account...' : 'Create account'}
         </button>
       </form>
-      {error && <p className="error">{error}</p>}
-      <p className="muted">
-        Already have an account? <Link to="/login">Login</Link>
+      <p className="form-footnote">
+        Already have an account? <Link to="/login">Log in</Link>
       </p>
-    </div>
+    </AuthLayout>
   )
 }

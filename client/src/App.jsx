@@ -10,7 +10,7 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <main className="container">
+      <main className="container page">
         <Routes>
           <Route path="/" element={<EnquiryForm />} />
           <Route path="/login" element={<Login />} />

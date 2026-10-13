@@ -30,7 +30,7 @@ Public and private are not separate collections. They are the same document, tol
 
 **Backend:** Node.js, Express 5, MongoDB with Mongoose 9, `jsonwebtoken`, `bcryptjs`, `validator`, `cors`, `dotenv`. Dev tools: `nodemon`, ESLint 10.
 
-**Frontend:** React 19, Vite, React Router, Axios, ESLint.
+**Frontend:** React 19, Vite, React Router, Axios, lucide-react icons, plain CSS, ESLint.
 
 ## Getting started
 
@@ -71,11 +71,14 @@ Open `http://localhost:5173`. The client calls `http://localhost:5000/api` by de
 
 | Page | Route | Login? | What it does |
 |---|---|---|---|
-| Enquiry form | `/` | No | Students submit an enquiry |
-| Register / Login | `/register`, `/login` | No | Employee account; the JWT is saved in `localStorage` |
-| Dashboard | `/dashboard` | Yes | **Public Leads** table with a Claim button, and **My Leads** table |
+| Enquiry form | `/` | No | Students submit an enquiry. A notice explains that only counselors can view enquiries, with links to log in or register. |
+| Register / Login | `/register`, `/login` | No | Counselor account; the JWT is saved in `localStorage` |
+| Dashboard | `/dashboard` | Yes | Stats, **Public leads** tab with a Claim button, **My leads** tab, and search |
 
-If a lead was claimed by someone else first, the dashboard shows "Enquiry already claimed" and refreshes the list. An expired or invalid token logs the user out.
+- Opening the dashboard while logged out redirects to login with a "please log in to view enquiries" message, then returns to the dashboard after login.
+- If another counselor claimed a lead first, a toast shows "Enquiry already claimed" and the list refreshes.
+- An expired or invalid token logs the user out.
+- The layout is responsive. On phones the navbar becomes a menu and lead rows become cards.
 
 ## API endpoints
 
@@ -186,17 +189,23 @@ crm/
 │   │   │   ├── AuthContext.js        # context + useAuth hook
 │   │   │   └── AuthProvider.jsx      # token/employee state, login, logout
 │   │   ├── components/
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── ProtectedRoute.jsx    # redirects to /login without a token
-│   │   │   └── LeadsTable.jsx        # used by both lead lists
+│   │   │   ├── Navbar.jsx            # desktop links + mobile menu
+│   │   │   ├── ProtectedRoute.jsx    # redirects to /login with a reason
+│   │   │   ├── AuthLayout.jsx        # split layout for login/register
+│   │   │   ├── FormField.jsx         # label + icon + input
+│   │   │   ├── PasswordInput.jsx     # show/hide password
+│   │   │   ├── LeadsTable.jsx        # table on desktop, cards on phones
+│   │   │   ├── StatCard.jsx
+│   │   │   └── Toast.jsx
 │   │   ├── pages/
 │   │   │   ├── EnquiryForm.jsx       # public form
 │   │   │   ├── Login.jsx
 │   │   │   ├── Register.jsx
-│   │   │   └── Dashboard.jsx         # public leads + claim, my leads
+│   │   │   └── Dashboard.jsx         # stats, tabs, search, claim
+│   │   ├── utils/format.js           # relative time, initials
 │   │   ├── App.jsx                   # routes
 │   │   ├── main.jsx
-│   │   └── index.css
+│   │   └── index.css                 # design tokens + responsive styles
 │   ├── .env.example
 │   └── package.json
 ├── CRM-API.postman_collection.json
