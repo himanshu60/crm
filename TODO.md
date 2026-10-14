@@ -43,7 +43,8 @@ Rule: write one file, then run `npm run lint` in `server/` and get zero errors b
 - [x] API connects to Atlas (verified on the live deploy)
 - [x] Commit and push to GitHub
 - [x] Deploy the API on Render: https://crm-1sq8.onrender.com/api/health
-- [ ] (Optional) Deploy the React client as a Render Static Site
+- [x] Deploy the React client as a Render Static Site: https://crm-client-yqmf.onrender.com
+- [ ] Add the `/*` → `/index.html` Rewrite rule on the static site (deep links return 404 until then)
 
 ### Postman flow to test
 1. Register and log in employee A and employee B.

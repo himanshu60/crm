@@ -19,6 +19,7 @@ Counselors log in to see them and <b>claim</b> a lead so no one else works on it
 </p>
 
 <p>
+<b>Live demo:</b> <a href="https://crm-client-yqmf.onrender.com/">https://crm-client-yqmf.onrender.com</a><br />
 <b>Live API:</b> <a href="https://crm-1sq8.onrender.com/api/health">https://crm-1sq8.onrender.com/api</a>
 </p>
 
@@ -325,6 +326,11 @@ The collection points to the live API, so nothing needs to run locally. To test 
 ## 🌐 Deployment
 
 Both parts deploy from this repo on [Render](https://render.com).
+
+| Part | Render service | URL |
+|---|---|---|
+| React client | Static Site | https://crm-client-yqmf.onrender.com |
+| REST API | Web Service | https://crm-1sq8.onrender.com/api |
 
 **API: Web Service**
 
