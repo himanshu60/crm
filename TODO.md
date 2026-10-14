@@ -12,7 +12,7 @@ Rule: write one file, then run `npm run lint` in `server/` and get zero errors b
 - [x] `eslint.config.js` (flat config, Node globals, CommonJS)
 - [x] `.env.example` and `.env` (local MongoDB for now)
 - [x] Create the folder structure and empty source files
-- [ ] Create a MongoDB Atlas cluster, then put its connection string in `.env` as `MONGO_URI`
+- [x] Create a MongoDB Atlas cluster (connection string set on Render as `MONGO_URI`)
 - [x] `git init` and push to https://github.com/himanshu60/crm
 
 ## Phase B: Server skeleton
@@ -40,9 +40,10 @@ Rule: write one file, then run `npm run lint` in `server/` and get zero errors b
 - [x] End-to-end test of every endpoint, including two simultaneous claims (exactly one 200 and one 409)
 - [x] Postman collection: `CRM-API.postman_collection.json` (ran it with Newman, all 6 requests pass)
 - [x] `README.md` with example requests and responses
-- [ ] Switch `MONGO_URI` to Atlas and run `npm run dev` once to confirm it connects
+- [x] API connects to Atlas (verified on the live deploy)
 - [x] Commit and push to GitHub
-- [ ] (Optional) Deploy on Render with the Atlas URI
+- [x] Deploy the API on Render: https://crm-1sq8.onrender.com/api/health
+- [ ] (Optional) Deploy the React client as a Render Static Site
 
 ### Postman flow to test
 1. Register and log in employee A and employee B.

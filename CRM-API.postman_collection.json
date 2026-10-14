@@ -9,7 +9,7 @@
         "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
     },
     "variable": [
-        { "key": "baseUrl", "value": "http://localhost:5000/api" },
+        { "key": "baseUrl", "value": "https://crm-1sq8.onrender.com/api" },
         { "key": "token", "value": "" },
         { "key": "enquiryId", "value": "" }
     ],

@@ -19,11 +19,16 @@ Counselors log in to see them and <b>claim</b> a lead so no one else works on it
 </p>
 
 <p>
+<b>Live API:</b> <a href="https://crm-1sq8.onrender.com/api/health">https://crm-1sq8.onrender.com/api</a>
+</p>
+
+<p>
 <a href="#-features">Features</a> ·
 <a href="#-screenshots">Screenshots</a> ·
 <a href="#-getting-started">Getting started</a> ·
 <a href="#-api-reference">API reference</a> ·
-<a href="#-design-decisions">Design decisions</a>
+<a href="#-design-decisions">Design decisions</a> ·
+<a href="#-deployment">Deployment</a>
 </p>
 
 </div>
@@ -171,7 +176,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`. The client calls `http://localhost:5000/api` by default. To use another API URL, create `client/.env` with `VITE_API_URL=<url>` (see `client/.env.example`).
+Open `http://localhost:5173`. In development the client calls `http://localhost:5000/api`. Production builds (`npm run build`) call the live API set in `client/.env.production`. To use another API URL, set `VITE_API_URL` (see `client/.env.example`).
 
 | Page | Route | Login? | What it does |
 |---|---|---|---|
@@ -181,7 +186,13 @@ Open `http://localhost:5173`. The client calls `http://localhost:5000/api` by de
 
 ## 📡 API reference
 
-Base URL: `http://localhost:5000/api`
+| | Base URL |
+|---|---|
+| Live (Render) | `https://crm-1sq8.onrender.com/api` |
+| Local | `http://localhost:5000/api` |
+
+> [!NOTE]
+> The live API runs on Render's free plan, which sleeps after 15 minutes without traffic. The first request after that can take about 50 seconds while it wakes up.
 
 | Method | Route | Auth | Description |
 |---|---|---|---|
@@ -307,10 +318,36 @@ crm/
 ## 🧪 Testing with Postman
 
 1. Import `CRM-API.postman_collection.json` into Postman.
-2. Start the API (`npm run dev` in `server/`).
-3. Run the requests from top to bottom. **Register** or **Login** saves the token automatically, and **Submit Enquiry** saves `enquiryId` for **Claim Lead**.
+2. Run the requests from top to bottom. **Register** or **Login** saves the token automatically, and **Submit Enquiry** saves `enquiryId` for **Claim Lead**.
 
-If the API runs somewhere else, change the `baseUrl` collection variable (default `http://localhost:5000/api`).
+The collection points to the live API, so nothing needs to run locally. To test a local server instead, start it (`npm run dev` in `server/`) and change the `baseUrl` collection variable to `http://localhost:5000/api`.
+
+## 🌐 Deployment
+
+Both parts deploy from this repo on [Render](https://render.com).
+
+**API: Web Service**
+
+| Setting | Value |
+|---|---|
+| Root Directory | `server` |
+| Build Command | `npm install` |
+| Start Command | `npm start` |
+| Environment variables | `MONGO_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN` (Render sets `PORT` itself) |
+| Health Check Path | `/api/health` |
+
+The database is MongoDB Atlas. Its **Network Access** allows `0.0.0.0/0`, because Render's free instances have no fixed outbound IP.
+
+**React client: Static Site**
+
+| Setting | Value |
+|---|---|
+| Root Directory | `client` |
+| Build Command | `npm install && npm run build` |
+| Publish Directory | `dist` |
+| Redirect/Rewrite rule | `/*` → `/index.html` (Rewrite), so routes like `/dashboard` work on refresh |
+
+The client gets the API URL from `client/.env.production` at build time.
 
 ## 📜 Scripts
 
